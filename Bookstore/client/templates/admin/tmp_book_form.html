@@ -1,0 +1,137 @@
+<h2>Administrationsbereich</h2>
+<div class="container">
+<div class="row">
+    <div class="col-md-6">
+        <h3 ng-hide="isEditMode">Neues Buch anlegen</h3>
+        <h3 ng-show="isEditMode">Buch bearbeiten</h3>
+
+        <form name="bookForm" novalidate>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.title.$dirty && bookForm.title.$invalid, 'has-success has-feedback':bookForm.title.$dirty && bookForm.title.$valid}">
+                <label class="control-label" for="title">Buchtitel</label>
+                <input type="text" placeholder="Titel..."
+                   ng-model="book.title" name="title" id="title" class="form-control" aria-describedby="inputError1Status" required>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.title.$dirty && bookForm.title.$invalid"></span>
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.title.$dirty && bookForm.title.$valid"></span>
+                <span id="inputError1Status" ng-show="bookForm.title.$dirty && bookForm.title.$invalid" class="help-block">
+                    Bitte geben Sie einen Buchtitel ein.
+                </span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-success has-feedback':bookForm.subtitle.$dirty && bookForm.subtitle.$valid}">
+                <label class="control-label" for="subtitle">Untertitel</label>
+                <input type="text" placeholder="Untertitel..."
+                   ng-model="book.subtitle" name="subtitle" id="subtitle" class="form-control">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.subtitle.$dirty && bookForm.subtitle.$valid"></span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.isbn.$dirty && bookForm.isbn.$invalid, 'has-success has-feedback':bookForm.isbn.$dirty && bookForm.isbn.$valid}">
+                <label class="control-label" for="isbn">ISBN</label>
+                <input type="text" placeholder="EINDEUTIGE ISBN..." id="isbn"
+                   ng-model="book.isbn" name="isbn" ng-disabled="isEditMode" required class="form-control" aria-describedby="inputError2Status">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.isbn.$dirty && bookForm.isbn.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.isbn.$dirty && bookForm.isbn.$invalid"></span>
+                <span id="inputError2Status" ng-show="bookForm.isbn.$dirty && bookForm.isbn.$invalid" class="help-block">
+                    Bitte geben Sie eine ISBN ein.
+                </span>
+           </div>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.abstract.$dirty && bookForm.abstract.$invalid, 'has-success has-feedback':bookForm.abstract.$dirty && bookForm.abstract.$valid}">
+                <label class="control-label" for="abstract">Kurzbeschreibung</label>
+                <textarea placeholder="Kurzbeschreibung..." id="abstract" class="form-control"
+                      ng-model="book.abstract" name="abstract" ></textarea>
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.abstract.$dirty && bookForm.abstract.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.abstract.$dirty && bookForm.abstract.$invalid"></span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.numPages.$dirty && bookForm.numPages.$invalid, 'has-success has-feedback':bookForm.numPages.$dirty && bookForm.numPages.$valid}">
+                <label class="control-label" for="numPages">Seiten</label>
+                <input type="number" min="1" placeholder="Seiten..." id="numPages" class="form-control"
+                   ng-model="book.num_pages" name="numPages" required aria-describedby="inputError3Status inputError4Status">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.numPages.$dirty && bookForm.numPages.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.numPages.$dirty && bookForm.numPages.$invalid"></span>
+            <span ng-show="bookForm.numPages.$dirty && bookForm.numPages.$invalid">
+                <span id="inputError3Status" ng-show="bookForm.numPages.$error.min" class="help-block">
+                    Das Buch muss min. eine Seite enthalten.
+                </span>
+                <span id="inputError4Status" ng-hide="bookForm.numPages.$error.min" class="help-block">
+                    Bitte geben Sie eine gültige Seitenzahl ein.
+                </span>
+            </span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.author.$dirty && bookForm.author.$invalid, 'has-success has-feedback':bookForm.author.$dirty && bookForm.author.$valid}">
+                <label class="control-label" for="author">Autor</label>
+                <input type="text" placeholder="Autor..." id="author" class="form-control"
+                       ng-model="book.author" name="author" required aria-describedby="inputError5Status">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.author.$dirty && bookForm.author.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.author.$dirty && bookForm.author.$invalid"></span>
+                <span id="inputError5Status" ng-show="bookForm.author.$dirty && bookForm.author.$invalid" class="help-block">
+                    Bitte geben Sie einen Autor ein.
+                </span>
+           </div>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.publisherName.$dirty && bookForm.publisherName.$invalid, 'has-success has-feedback':bookForm.publisherName.$dirty && bookForm.publisherName.$valid}">
+                <label class="control-label" for="publisherName">Verlag</label>
+                 <select name="publisherName" id="publisherName" class="form-control"
+                        ng-model="book.publisher" required aria-describedby="inputError6Status"
+                        ng-options="option as option.name for option in publishers track by option.id">
+                </select>
+
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.publisherName.$dirty && bookForm.publisherName.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.publisherName.$dirty && bookForm.publisherName.$invalid"></span>
+                <span id="inputError6Status" ng-show="bookForm.publisherName.$dirty && bookForm.publisherName.$invalid" class="help-block">
+                    Bitte geben Sie einen Verlag ein.
+                </span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.prize.$dirty && bookForm.prize.$invalid, 'has-success has-feedback':bookForm.prize.$dirty && bookForm.prize.$valid}">
+                <label class="control-label" for="numPages">Preis</label>
+                <input type="number" min="0.01" placeholder="Seiten..." id="prize" class="form-control"
+                       ng-model="book.prize" name="prize" required aria-describedby="inputError3Status inputError4Status">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.prize.$dirty && bookForm.prize.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.prize.$dirty && bookForm.prize.$invalid"></span>
+            <span ng-show="bookForm.prize.$dirty && bookForm.prize.$invalid">
+                <span id="inputError3Status" ng-show="bookForm.prize.$error.min" class="help-block">
+                    Das Buch muss min. einen Preis von 00.01 € haben.
+                </span>
+                <span id="inputError4Status" ng-hide="bookForm.prize.$error.min" class="help-block">
+                    Bitte geben Sie eine gültigen Preis ein.
+                </span>
+            </span>
+            </div>
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.img.$dirty && bookForm.img.$invalid, 'has-success has-feedback':bookForm.img.$dirty && bookForm.img.$valid}">
+                <label class="control-label" for="bookImg">Bild</label>
+                <input type="url" placeholder="Link zum Bild..." id="bookImg" class="form-control"
+                       ng-model="book.img" name="bookImg" required aria-describedby="inputError7Status inputError8Status" >
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.img.$dirty && bookForm.img.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.img.$dirty && bookForm.img.$invalid"></span>
+                <span ng-show="bookForm.img.$dirty && bookForm.img.$invalid">
+                    <span id="inputError7Status" ng-show="bookForm.img.$error.url">
+                        Bitte geben Sie eine gültige URL ein.
+                    </span>
+                    <span id="inputError8Status" ng-hide="bookForm.img.$error.url">
+                        Bitte geben Sie den Link zum Bild an.
+                    </span>
+                </span>
+            </div>
+
+
+
+
+
+            <button class="bm-cancel-btn btn btn-danger"
+                    ng-click="cancelAction()">Abbrechen</button>
+            <button class="bm-submit-btn btn btn-success"
+                    ng-click="submitAction()"
+                    ng-disabled="bookForm.$invalid">{{ submitBtnLabel }}</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h3>Vorschau</h3>
+        <div class="simple-border padded"
+             ng-include="'templates/tmp_book_details.html'">
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,115 @@
+<div class="row" ng-init="init()">
+    <div class="col-md-3">
+        <button ng-click="goToListView()" href="" class="btn btn-default">
+            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> zur Listenansicht
+        </button>
+    </div>
+
+    <div class="col-md-3">
+        <span ng-show="loggedIn && !isAdmin">
+           <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> </span>
+            Bestellübersicht
+        </span>
+    </div>
+    <div class="col-md-4">
+        <span href="#" ng-click="showBucket()" class="btn">
+            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"> </span>
+            Warenkorb ({{bucketAmount}})
+        </span>
+    </div>
+
+</div>
+<div class="row min-height"></div>
+<div class="row">
+    <div class="col-md-12">
+
+        <!--Login Form-->
+
+        <form class="navbar-form navbar-right" ng-submit="login()" ng-controller="LoginCtrl" ng-show="!loggedIn">
+            <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }"
+                 ng-if="flash" ng-bind="flash.message"></div>
+            <div class="form-group">
+                <input type="text" placeholder="User" class="form-control" ng-model="username">
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password" class="form-control" ng-model="password">
+            </div>
+            <input type="submit" class="btn btn-success" value="Login">
+        </form>
+        <p><a href="#/books" class="btn btn-primary" ng-click="logout()" ng-controller="LoginCtrl"
+              ng-show="loggedIn">Logout</a></p>
+    </div>
+</div>
+<div class="row min-height"></div>
+
+<div class="row">
+    <h2>Ihr Warenkorb</h2>
+</div>
+
+<div class="row" ng-hide="noBooks">
+    <div class="col-md-3">Buch: </div>
+    <div class="col-md-2">Author: </div>
+    <div class="col-md-2">Preis: </div>
+    <div class="col-md-2">Anzahl: </div>
+    <div class="col-md-2">Summe:</div>
+    <div class="col-md-1"></div>
+</div>
+<div class="row" ng-repeat="book in books" ng-hide="noBooks">
+    <div class="col-md-3" ng-hide="isUser"><a ng-href="#/books/{{ book.isbn }}" ng-bind="book.title"></a> </div>
+    <div class="col-md-3" ng-show="isUser"><a ng-href="#/user/books/{{ book.isbn }}" ng-bind="book.title"></a> </div>
+    <div class="col-md-2">{{book.author}} </div>
+    <div class="col-md-2">{{book.prize  | currency : '€ ' }} </div>
+    <div class="col-md-2"><i class="glyphicon glyphicon-chevron-up" ng-click="increaseAmount(book)"></i> {{book.amount}} <i class="glyphicon glyphicon-chevron-down" ng-click="decreaseAmount(book)"></i> </div>
+    <div class="col-md-2">{{book.prize * book.amount  | currency : '€ ' }}</div>
+    <div class="col-md-1"><i class="glyphicon glyphicon-trash btn" ng-click="deleteItem(book.isbn)"></i> </div>
+</div>
+<div class="row bb"></div>
+
+<div class="row" ng-hide="noBooks">
+    <div class="col-md-4"> </div>
+    <div class="col-md-2"> </div>
+    <div class="col-md-1"> </div>
+    <div class="col-md-1">Netto: </div>
+    <div class="col-md-2">{{(getTotal() /110)*100  | currency : '€ '  }}</div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="row" ng-hide="noBooks">
+    <div class="col-md-4"> </div>
+    <div class="col-md-2"> </div>
+    <div class="col-md-1"> </div>
+    <div class="col-md-1">Ust: (10%) </div>
+    <div class="col-md-2">{{(getTotal()/110)*10  | currency : '€ '  }}</div>
+    <div class="col-md-1"></div>
+</div>
+
+
+
+<div class="row" ng-hide="noBooks">
+    <div class="col-md-4"> </div>
+    <div class="col-md-3"> </div>
+    <div class="col-md-1"> </div>
+    <div class="col-md-1">Summe: </div>
+    <div class="col-md-2">{{getTotal()  | currency : '€ '  }}</div>
+    <div class="col-md-1"></div>
+</div>
+<div class="row">
+
+</div>
+<div class="row" ng-hide="noBooks">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <button class="btn btn-danger" ng-click="deleteBucket()">Warenkorb leeren</button>
+    </div>
+    <div class="col-md-4" ng-show="isUser">
+        <button class="btn btn-success" ng-click="buyNow()">Jetzt kaufen</button>
+    </div>
+    <div class="col-md-4" ng-hide="isUser">
+        <button class="btn btn-warning"> Bitte einloggen um die Artikel zu kaufen </button>
+    </div>
+</div>
+<div ng-show="noBooks">
+    <h5>Ihr Warenkorb ist im Moment noch leer</h5>
+</div>
+
+

@@ -1,0 +1,181 @@
+<div class="row">
+    <div class="col-md-3">
+        <button ng-click="goToListView()" href="" class="btn btn-default">
+            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> zur Listenansicht
+        </button>
+    </div>
+
+    <div class="col-md-3">
+        <span ng-show="loggedIn && !isAdmin">
+           <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> </span>
+            Bestellübersicht
+        </span>
+    </div>
+    <div class="col-md-4">
+        <span href="#" ng-click="goToBucket()" class="btn">
+            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"> </span>
+            Warenkorb ({{bucketAmount}})
+        </span>
+    </div>
+
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        <!--Login Form-->
+
+        <form class="navbar-form navbar-right" ng-submit="login()" ng-controller="LoginCtrl" ng-show="!loggedIn">
+            <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }"
+                 ng-if="flash" ng-bind="flash.message"></div>
+            <div class="form-group">
+                <input type="text" placeholder="User" class="form-control" ng-model="username">
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password" class="form-control" ng-model="password">
+            </div>
+            <input type="submit" class="btn btn-success" value="Login">
+        </form>
+        <p><a href="#/books" class="btn btn-primary" ng-click="logout()" ng-controller="LoginCtrl"
+              ng-show="loggedIn">Logout</a></p>
+    </div>
+</div>
+<div class="row min-height"></div>
+
+<h2 ng-bind="book.title" class="bm-book-title"></h2>
+<h3 ng-bind="book.subtitle" class="bm-book-subtitle"></h3>
+
+<p>
+
+<div class="row">
+    <div class="col-md-3">
+        <img src="{{book.img}}" alt="{{book.title}}" width="150"/>
+    </div>
+    <div class="col-md-5">
+        <div>
+            <span>von: </span>
+            <span ng-bind-template="{{ book.author }}" class="bm-book-author"></span>
+
+        </div>
+        <div>
+            <span>Verlag: </span>
+            <a ng-bind="book.publisher.name"
+               ng-href="{{ book.publisher.url }}"
+               target="_blank"
+               class="bm-book-publisher-name">
+            </a>
+        </div>
+        <div>
+            <span>Bewertung: ({{avgRaiting | number:2 }})</span>
+
+            <i ng-hide="hideStar">
+
+                <i ng-repeat="n in [] | range:avgRaiting">
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </i>
+            </i>
+
+
+        </div>
+    </div>
+    <div class="col-md-4">
+
+        <ul class="detail-list">
+            <li ng-bind-template="ISBN: {{ book.isbn }}"
+                class="bm-book-isbn detail-list__element"></li>
+            <li ng-bind-template="Seiten: {{ book.num_pages }}"
+                class="bm-book-num-pages detail-list__element"></li>
+
+
+            <li ng-bind-template="Preis: {{ book.prize | currency : '€ ' }}"
+                class="bm-book-price detail-list__element"></li>
+        </ul>
+    </div>
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+        <button ng-click="addToBucket(book)" class="btn btn-primary">zum Warenkorb hinzufügen</button>
+    </div>
+</div>
+
+
+<tags tag-data="book.tags"></tags>
+<!--<div tags></div>-->
+</p>
+<hr>
+<h4>Kurzfassung: </h4>
+<p ng-bind="book.abstract" class="bm-book-abstract">
+</p>
+<div>
+    <h4>Kommentare:</h4>
+
+    <div ng-repeat="elm in raitings | orderBy: '[created]'">
+        <div class="comment__box">
+            <div class="comment__box-header">
+                Kommentar von: {{elm.user.username}} <br/>
+                <span class="small">am: {{elm.created |date:'dd.MM.yyyy'}} um {{ elm.created | date:'HH:mm'}} Uhr</span>
+            </div>
+            <div class="comment__box-raiting">
+                <span>Bewertung: ({{elm.raiting}})</span>
+
+                <i ng-hide="hideStar">
+
+                    <i ng-repeat="n in [] | range:elm.raiting">
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                    </i>
+                </i>
+            </div>
+            <div class="comment__box-message">{{elm.raiting_comment}}</div>
+
+
+        </div>
+
+    </div>
+    <div ng-hide="loggedIn">
+        Um einen neunen Kommentar und Bewertung zu verfassen, bitte einloggen!
+    </div>
+    <div ng-show="isUser">
+
+        <form name="raitingForm" novalidate>
+
+
+            <div class="form-group"
+                 ng-class="{'has-error has-feedback': raitingForm.star.$dirty && raitingForm.star.$invalid, 'has-success has-feedback':raitingForm.star.$dirty && raitingForm.star.$valid}">
+                <label class="control-label" for="star">Sterne</label>
+                <input type="number" min="1" max="10" placeholder="Sterne..." id="star" class="form-control"
+                       ng-model="newraiting.raiting" name="star" required
+                       aria-describedby="inputError3Status inputError4Status">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"
+                      ng-if="raitingForm.star.$dirty && raitingForm.star.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"
+                      ng-if="raitingForm.star.$dirty && raitingForm.star.$invalid"></span>
+            <span ng-show="raitingForm.star.$dirty && raitingForm.star.$invalid">
+                <span id="inputError3Status" ng-show="raitingForm.star.$error.min" class="help-block">
+                    Das Buch muss min. einen Stern erhalten.
+                </span>
+                <span id="inputError4Status" ng-hide="raitingForm.star.$error.min" class="help-block">
+                    Bitte geben Sie eine gültige Bewertung ein.
+                </span>
+            </span>
+            </div>
+            <div class="form-group">
+                <i ng-repeat="n in [] | range:newraiting.raiting">
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </i>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': raitingForm.raiting_comment.$dirty && raitingForm.raiting_comment.$invalid, 'has-success has-feedback':raitingForm.raiting_comment.$dirty && raitingForm.raiting_comment.$valid}">
+                <label class="control-label" for="raiting_comment">Kommentar</label>
+                <textarea placeholder="Kurzbeschreibung..." id="raiting_comment" class="form-control"
+                          ng-model="newraiting.raiting_comment" name="raiting_comment" ></textarea>
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="raitingForm.raiting_comment.$dirty && raitingForm.raiting_comment.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="raitingForm.raiting_comment.$dirty && raitingForm.raiting_comment.$invalid"></span>
+            </div>
+
+            <button class="bm-submit-btn btn btn-success"
+                    ng-click="submitAction()"
+                    ng-disabled="raitingForm.$invalid">Senden
+            </button>
+        </form>
+    </div>
+
+

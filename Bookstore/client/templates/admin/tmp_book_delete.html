@@ -1,0 +1,11 @@
+<h2>Administrationsbereich</h2>
+<h3>
+    Wollen Sie das Buch:
+    &quot;{{ book.title }}&quot;
+    wirklich löschen?
+</h3>
+<button class="bm-delete-btn"
+        ng-click="deleteBook(book.isbn)">Löschen</button>
+
+<button class="bm-cancel-btn"
+        ng-click="cancel()">Abbrechen</button>

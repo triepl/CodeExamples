@@ -1,0 +1,19 @@
+
+<h2>Übersicht Verlag</h2>
+
+<table class="bm-book-list table table-striped table-hover">
+    <thead>
+        <tr>
+            <td>Verlag</td><td>URL</td><td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="publisher in publishers | orderBy: '[name]'">
+            <td><a ng-href="#/admin/publishers/{{ publisher.id }}/edit" ng-bind="publisher.name"></a></td>
+            <td ng-bind="publisher.url"></td>
+            <td><button class="glyphicon glyphicon-trash" ng-click="delete(publisher.id)"></button></td>
+        </tr>
+    </tbody>
+</table>
+<a class="bm-new-book-link" ng-href="#/admin/publishers/new">Neuen Verlag anlegen</a></br>
+<a class="bm-new-book-link" ng-href="#/admin/books">Zur Buchübersicht</a>

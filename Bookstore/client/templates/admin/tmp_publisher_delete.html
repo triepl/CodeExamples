@@ -1,0 +1,11 @@
+<h2>Administrationsbereich</h2>
+<h3>
+    Wollen Sie den Verlag:
+    &quot;{{ publisher.name }}&quot;
+    wirklich löschen?
+</h3>
+<button class="bm-delete-btn"
+        ng-click="deletePublisher(publisher.id)">Löschen</button>
+
+<button class="bm-cancel-btn"
+        ng-click="cancel()">Abbrechen</button>

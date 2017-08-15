@@ -1,0 +1,45 @@
+<h2>Administrationsbereich</h2>
+<div class="container">
+<div class="row">
+    <div class="col-md-12">
+        <h3 ng-hide="isEditMode">Neuen Verlag anlegen</h3>
+        <h3 ng-show="isEditMode">Verlag editieren</h3>
+
+        <form name="bookForm" novalidate>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.publisherName.$dirty && bookForm.publisherName.$invalid, 'has-success has-feedback':bookForm.publisherName.$dirty && bookForm.publisherName.$valid}">
+                <label class="control-label" for="publisherName">Verlag</label>
+                <input type="text" placeholder="Verlag..." id="publisherName" class="form-control"
+                       ng-model="publisher.name" name="publisherName" required aria-describedby="inputError6Status">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.publisherName.$dirty && bookForm.publisherName.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.publisherName.$dirty && bookForm.publisherName.$invalid"></span>
+                <span id="inputError6Status" ng-show="bookForm.publisherName.$dirty && bookForm.publisherName.$invalid" class="help-block">
+                    Bitte geben Sie einen Verlag ein.
+                </span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error has-feedback': bookForm.publisherUrl.$dirty && bookForm.publisherUrl.$invalid, 'has-success has-feedback':bookForm.publisherUrl.$dirty && bookForm.publisherUrl.$valid}">
+                <label class="control-label" for="publisherUrl">Website</label>
+                 <input type="url" placeholder="Webseite des Verlags..." id="publisherUrl" class="form-control"
+                   ng-model="publisher.url" name="publisherUrl" required aria-describedby="inputError7Status inputError8Status" >
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="bookForm.publisherUrl.$dirty && bookForm.publisherUrl.$valid"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="bookForm.publisherUrl.$dirty && bookForm.publisherUrl.$invalid"></span>
+                <span ng-show="bookForm.publisherUrl.$dirty && bookForm.publisherUrl.$invalid">
+                    <span id="inputError7Status" ng-show="bookForm.publisherUrl.$error.url">
+                        Bitte geben Sie eine gültige URL ein.
+                    </span>
+                    <span id="inputError8Status" ng-hide="bookForm.publisherUrl.$error.url">
+                        Bitte geben Sie die Webseite des Verlags ein.
+                    </span>
+                </span>
+            </div>
+
+            <button class="bm-cancel-btn btn btn-danger"
+                    ng-click="cancelAction()">Abbrechen</button>
+            <button class="bm-submit-btn btn btn-success"
+                    ng-click="submitAction()"
+                    ng-disabled="bookForm.$invalid">{{ submitBtnLabel }}</button>
+        </form>
+    </div>
+</div>
+</div>

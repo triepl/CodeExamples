@@ -1,0 +1,95 @@
+<div class="row" ng-init="init()">
+    <div class="col-md-3">
+        <button ng-click="goToListView()" href="" class="btn btn-default">
+            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> zur Listenansicht
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button ng-click="goToUserOrderListView()" href="" class="btn btn-default">
+            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> zur Bestellübersicht
+        </button>
+    </div>
+
+    <div class="col-md-3">
+        <span ng-show="loggedIn && !isAdmin">
+           <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> </span>
+            Bestellübersicht
+        </span>
+    </div>
+    <div class="col-md-3">
+        <span href="#" ng-click="showBucket()" class="btn">
+            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"> </span>
+            Warenkorb ({{bucketAmount }})
+        </span>
+    </div>
+
+</div>
+
+<div class="row min-height"></div>
+<div class="row">
+    <div class="col-md-12">
+
+        <!--Login Form-->
+
+        <form class="navbar-form navbar-right" ng-submit="login()" ng-controller="LoginCtrl" ng-show="!loggedIn">
+            <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }"
+                 ng-if="flash" ng-bind="flash.message"></div>
+            <div class="form-group">
+                <input type="text" placeholder="User" class="form-control" ng-model="username">
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password" class="form-control" ng-model="password">
+            </div>
+            <input type="submit" class="btn btn-success" value="Login">
+        </form>
+        <p><a href="#/books" class="btn btn-primary" ng-click="logout()" ng-controller="LoginCtrl"
+              ng-show="loggedIn">Logout</a></p>
+    </div>
+</div>
+<div class="row min-height"></div>
+
+
+
+
+<div class="row">
+    <h2>Bestellung vom {{items[0].order.created | date:'dd.MM.yyyy'}}</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-3">Buch:</div>
+    <div class="col-md-3">Author:</div>
+    <div class="col-md-2">Preis:</div>
+    <div class="col-md-1">Anzahl:</div>
+    <div class="col-md-2">Summe:</div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="row" ng-repeat="item in items">
+    <div class="col-md-3"><a ng-href="#/user/books/{{ item.book.isbn }}" ng-bind="item.book.title"></a></div>
+    <div class="col-md-3">{{item.book.author}}</div>
+    <div class="col-md-2">{{item.item_price | currency : '€ '}}</div>
+    <div class="col-md-1">{{item.amount}}</div>
+    <div class="col-md-2">{{item.amount * item.item_price | currency : '€ '}}</div>
+</div>
+<div class="row bb"></div>
+<div class="row">
+    <div class="col-md-8"></div>
+
+    <div class="col-md-3">Summe: {{netto | currency : '€ '}}</div>
+
+    <div class="col-md-1"></div>
+</div>
+<div class="row">
+    <div class="col-md-8"></div>
+
+    <div class="col-md-3">UST 10%: {{ust | currency : '€ '}}</div>
+
+    <div class="col-md-1"></div>
+</div>
+<div class="row">
+    <div class="col-md-8"></div>
+
+    <div class="col-md-3">Brutto: {{total | currency : '€ '}}</div>
+
+    <div class="col-md-1"></div>
+</div>
